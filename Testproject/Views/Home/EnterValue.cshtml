@@ -1,0 +1,12 @@
+﻿@model Testproject.Models.UserInput
+
+<h2>Enter a Value</h2>
+
+<form asp-action="EnterValue" method="post">
+    <div>
+        <label>Enter Something:</label>
+        <input asp-for="Value"/>
+        <span asp-asp-validation-for="Value"></span>
+    </div>
+    <button type="submit">Submit</button>
+</form>
