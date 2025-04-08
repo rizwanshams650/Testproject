@@ -1,16 +1,19 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Testproject.Models;
+using Testproject.Services;
 
 namespace Testproject.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly PostService _postService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, PostService postService)
         {
             _logger = logger;
+            _postService = postService;
         }
 
         public IActionResult Index()
@@ -51,6 +54,12 @@ namespace Testproject.Controllers
             _logger.LogInformation("DisplayValue called with TempData value: {Value}", value);
 
             return View();
+        }
+
+        public async Task<IActionResult> ShowPosts()
+        {
+            var posts = await _postService.GetPostsAsyncs();
+            return View(posts);
         }
 
     }
