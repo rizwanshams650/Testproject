@@ -1,0 +1,24 @@
+﻿@model List<Testproject.Models.Post>
+
+<h1>Posts from API</h1>
+
+<table class="table">
+
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>User</th>
+            <th>Title</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var post in Model.Take(10))
+        {
+            <tr>
+                <td>@post.Id</td>
+                <td>@post.UserId</td>
+                <td>@post.Title</td>
+            </tr>
+        }
+        </tbody>
+    </table>

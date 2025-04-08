@@ -1,16 +1,19 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Testproject.Models;
+using Testproject.Services;
 
 namespace Testproject.Controllers
 {
     public class HomeController : Controller
     {
-        //private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<HomeController> _logger;
+        private readonly PostService _postService;
 
-        public HomeController()
+        public HomeController(ILogger<HomeController> logger, PostService postService)
         {
-            //_logger = logger;
+            _logger = logger;
+            _postService = postService;
         }
 
         public IActionResult Index()
@@ -32,19 +35,31 @@ namespace Testproject.Controllers
         [HttpGet]
         public IActionResult EnterValue()
         {
+            _logger.LogInformation("Get EnterValue at {Time}", DateTime.UtcNow);
+
             return View();
         }
         [HttpPost]
         public IActionResult EnterValue(UserInput input)
         {
+            _logger.LogInformation("Post EnterValue called with user input:{Value} at {Time}", input.Value, DateTime.UtcNow);
             TempData["UserValue"] = input.Value;
             return RedirectToAction("DisplayValue");
         }
 
         public IActionResult DisplayValue()
         {
-            ViewBag.UserValue = TempData["UserValue"];
+            var value = TempData["UserValue"];
+            ViewBag.UserValue = value;
+            _logger.LogInformation("DisplayValue called with TempData value: {Value}", value);
+
             return View();
+        }
+
+        public async Task<IActionResult> ShowPosts()
+        {
+            var posts = await _postService.GetPostsAsyncs();
+            return View(posts);
         }
 
     }
